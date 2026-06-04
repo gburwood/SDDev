@@ -1,9 +1,8 @@
 ```yaml
-
 application:
   name: Hello Sudoku
   type: client_side_sudoku_solver
-  version: 1.0
+  version: 1.1
   platform:
     host: SharePoint Online
     runtime: browser
@@ -28,6 +27,7 @@ users:
         - paste_puzzle
         - generate_puzzle
         - check_puzzle
+        - request_hint
         - solve_one_cell
         - solve_all
         - reset_puzzle
@@ -53,8 +53,10 @@ responsive:
     layout: two_column
     grid_position: left
     controls_position: right
+
   tablet:
     layout: adaptive
+
   mobile:
     layout: single_column
     horizontal_scroll: false
@@ -112,6 +114,10 @@ controls:
       label: Check Puzzle
       type: secondary
 
+    - id: hint
+      label: Hint
+      type: secondary
+
     - id: solveOneCell
       label: Solve One Cell
       type: secondary
@@ -142,17 +148,24 @@ grid:
 cell_states:
   empty:
     editable: true
+
   given:
     editable: false
     css_class: hs-cell-given
+
   user_entered:
     editable: true
     css_class: hs-cell-user
+
   solver_filled:
     editable: true
     css_class: hs-cell-solved
+
   invalid:
     css_class: hs-cell-invalid
+
+  hinted:
+    css_class: hs-cell-hint
 
 validation:
   allow_temporary_conflicts: true
@@ -173,9 +186,41 @@ validation:
     invalid_string_character: "The pasted puzzle contains invalid characters."
     no_solution: "This puzzle has no valid solution."
     multiple_solutions: "This puzzle has multiple possible solutions."
+    no_hint_available: "No logical hint available."
+    hint_blocked_invalid_puzzle: "Fix invalid cells before requesting a hint."
 
 solver:
   strategy: human_techniques_then_backtracking
+
+  hint:
+    enabled: true
+    use_backtracking: false
+    mutate_grid: false
+    highlight_target_cell: true
+    explain_technique: true
+    show_reasoning: true
+
+    output:
+      include_row: true
+      include_column: true
+      include_box: true
+      include_value: true
+      include_technique: true
+
+    message_templates:
+      naked_single: >
+        Cell R{row}C{column} can only contain {value}.
+        All other values are eliminated by row, column, and box constraints.
+
+      hidden_single: >
+        In {scope_type} {scope_id}, the value {value}
+        can only appear in cell R{row}C{column}.
+
+      single_candidate: >
+        Cell R{row}C{column} has a single remaining candidate: {value}.
+
+      no_hint_available: >
+        No logical hint is currently available using the implemented techniques.
 
   solve_one_cell:
     enabled: true
@@ -192,6 +237,7 @@ solver:
       - naked_single
       - hidden_single
       - single_candidate
+
     future:
       - naked_pairs
       - hidden_pairs
@@ -206,9 +252,11 @@ generation:
     Easy:
       approximate_givens_min: 36
       approximate_givens_max: 45
+
     Medium:
       approximate_givens_min: 30
       approximate_givens_max: 35
+
     Hard:
       approximate_givens_min: 24
       approximate_givens_max: 29
@@ -223,11 +271,19 @@ completion:
 
 status_panel:
   enabled: true
+
   message_types:
     - info
     - success
     - warning
     - error
+    - hint
+
+  hint_display:
+    show_technique_name: true
+    show_target_cell: true
+    show_explanation: true
+    persist_until_next_action: true
 
 accessibility:
   keyboard_navigation: true
@@ -237,11 +293,13 @@ accessibility:
 
 performance:
   validation_target_ms: 100
+  hint_target_ms: 500
   solve_target_ms: 1000
   generation_target_ms: 3000
 
 deployment:
   suggested_folder: SiteAssets/HelloSudoku
+
   files:
     - hello-sudoku.html
     - hello-sudoku.js
@@ -250,11 +308,10 @@ deployment:
 code_generation_rules:
   source_of_truth: this_specification
   manual_code_changes_allowed: false
+
   change_process:
     - update_specification
     - increment_version
     - regenerate_code
     - test_against_specification
 ```
-
----
