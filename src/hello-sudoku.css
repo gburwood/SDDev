@@ -1,0 +1,209 @@
+/*
+Hello Sudoku
+Generated from Development Specification v1.0
+*/
+
+.hello-sudoku-app {
+    box-sizing: border-box;
+    max-width: 1100px;
+    margin: 1rem auto;
+    padding: 0.75rem;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+.hello-sudoku-app *,
+.hello-sudoku-app *::before,
+.hello-sudoku-app *::after {
+    box-sizing: border-box;
+}
+
+.hs-card {
+    background: #fff;
+    border: 1px solid #dde2e6;
+    border-radius: 16px;
+    box-shadow: 0 8px 22px rgba(0,0,0,0.08);
+    padding: 1rem;
+    margin-bottom: 1rem;
+}
+
+.hs-header {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    align-items: center;
+}
+
+.hs-header h2 {
+    margin: 0;
+    font-weight: 700;
+}
+
+.hs-header p {
+    margin: 0.25rem 0 0;
+    color: #5c6773;
+}
+
+.hs-badge {
+    display: inline-flex;
+    align-items: center;
+    white-space: nowrap;
+    border-radius: 999px;
+    background: #eef5ff;
+    color: #174ea6;
+    padding: 0.4rem 0.7rem;
+    font-size: 0.85rem;
+    font-weight: 600;
+}
+
+.hs-layout {
+    display: grid;
+    grid-template-columns: minmax(320px, 1fr) 310px;
+    gap: 1rem;
+    align-items: start;
+}
+
+.hs-grid-card {
+    display: flex;
+    justify-content: center;
+}
+
+.hs-grid {
+    display: grid;
+    grid-template-columns: repeat(9, minmax(28px, 1fr));
+    grid-template-rows: repeat(9, minmax(28px, 1fr));
+    width: min(78vw, 560px);
+    aspect-ratio: 1 / 1;
+    border: 3px solid #1f2937;
+    background: #1f2937;
+}
+
+.hs-cell {
+    width: 100%;
+    height: 100%;
+    min-width: 0;
+    border: 1px solid #b7c0ca;
+    background: #fff;
+    color: #1f2937;
+    text-align: center;
+    font-size: clamp(1.1rem, 3vw, 2rem);
+    font-weight: 500;
+    outline: none;
+}
+
+.hs-cell:nth-child(3n) {
+    border-right: 3px solid #1f2937;
+}
+
+.hs-cell:nth-child(9n) {
+    border-right: none;
+}
+
+.hs-cell[data-row="2"],
+.hs-cell[data-row="5"] {
+    border-bottom: 3px solid #1f2937;
+}
+
+.hs-cell:focus {
+    box-shadow: inset 0 0 0 3px #0d6efd;
+    position: relative;
+    z-index: 1;
+}
+
+.hs-cell-given {
+    background: #edf2f7;
+    color: #111827;
+    font-weight: 800;
+}
+
+.hs-cell-user {
+    background: #fff;
+}
+
+.hs-cell-solved {
+    background: #e7f7ed;
+    color: #146c43;
+    font-weight: 700;
+}
+
+.hs-cell-invalid {
+    background: #ffe4e6;
+    color: #b42318;
+    box-shadow: inset 0 0 0 2px #dc3545;
+}
+
+.hs-status {
+    border-radius: 10px;
+    padding: 0.8rem 1rem;
+    border: 1px solid transparent;
+}
+
+.hs-status-info {
+    background: #eef5ff;
+    border-color: #cfe2ff;
+    color: #174ea6;
+}
+
+.hs-status-success {
+    background: #e7f7ed;
+    border-color: #badbcc;
+    color: #0f5132;
+}
+
+.hs-status-warning {
+    background: #fff8e1;
+    border-color: #ffecb5;
+    color: #664d03;
+}
+
+.hs-status-error {
+    background: #fdecec;
+    border-color: #f5c2c7;
+    color: #842029;
+}
+
+.hs-controls-card h3,
+.hs-status-card h3 {
+    margin-top: 0;
+    font-size: 1.1rem;
+    font-weight: 700;
+}
+
+@media (max-width: 850px) {
+    .hs-layout {
+        grid-template-columns: 1fr;
+    }
+
+    .hs-grid {
+        width: min(92vw, 560px);
+    }
+}
+
+@media (max-width: 520px) {
+    .hello-sudoku-app {
+        padding: 0.25rem;
+    }
+
+    .hs-header {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .hs-card {
+        border-radius: 12px;
+        padding: 0.75rem;
+    }
+
+    .hs-grid {
+        width: calc(100vw - 2rem);
+    }
+}
+
+@media (prefers-contrast: more) {
+    .hs-cell {
+        border-color: #000;
+    }
+
+    .hs-cell:focus {
+        box-shadow: inset 0 0 0 4px #000;
+    }
+}
