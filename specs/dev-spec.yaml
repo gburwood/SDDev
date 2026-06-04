@@ -1,0 +1,274 @@
+# Hello Sudoku
+
+## Development Specification v1.0
+
+### Purpose
+
+This specification is the code-generation source of truth for Hello Sudoku.
+
+Generated code should follow this document.
+
+Manual changes should be avoided unless the specification is updated first.
+
+---
+
+```yaml
+
+application:
+  name: Hello Sudoku
+  type: client_side_sudoku_solver
+  version: 1.0
+  platform:
+    host: SharePoint Online
+    runtime: browser
+    storage: none
+
+technology:
+  html: true
+  css: true
+  javascript: true
+  jquery: true
+  bootstrap: true
+  jquery_ui: true
+  sharepoint_rest: false
+  power_automate: false
+  azure: false
+
+users:
+  roles:
+    - name: User
+      permissions:
+        - enter_puzzle
+        - paste_puzzle
+        - generate_puzzle
+        - check_puzzle
+        - solve_one_cell
+        - solve_all
+        - reset_puzzle
+        - clear_puzzle
+        - copy_puzzle_string
+
+persistence:
+  enabled: false
+  sharepoint_lists_required: false
+  browser_local_storage: false
+
+layout:
+  style: modern_card_based
+  responsive: true
+  sections:
+    - header
+    - sudoku_grid
+    - controls
+    - status_panel
+
+responsive:
+  desktop:
+    layout: two_column
+    grid_position: left
+    controls_position: right
+  tablet:
+    layout: adaptive
+  mobile:
+    layout: single_column
+    horizontal_scroll: false
+
+input_methods:
+  manual_grid_entry:
+    enabled: true
+    allowed_values:
+      - blank
+      - 1
+      - 2
+      - 3
+      - 4
+      - 5
+      - 6
+      - 7
+      - 8
+      - 9
+
+  paste_string:
+    enabled: true
+    length: 81
+    blank_characters:
+      - "0"
+      - "."
+    valid_digits:
+      - "1"
+      - "2"
+      - "3"
+      - "4"
+      - "5"
+      - "6"
+      - "7"
+      - "8"
+      - "9"
+
+  generate_sample:
+    enabled: true
+    difficulty_levels:
+      - Easy
+      - Medium
+      - Hard
+
+controls:
+  buttons:
+    - id: generatePuzzle
+      label: Generate Puzzle
+      type: primary
+
+    - id: pastePuzzle
+      label: Paste Puzzle
+      type: secondary
+
+    - id: checkPuzzle
+      label: Check Puzzle
+      type: secondary
+
+    - id: solveOneCell
+      label: Solve One Cell
+      type: secondary
+
+    - id: solveAll
+      label: Solve All
+      type: primary
+
+    - id: resetPuzzle
+      label: Reset
+      type: secondary
+
+    - id: clearPuzzle
+      label: Clear
+      type: secondary
+
+    - id: copyPuzzleString
+      label: Copy Puzzle String
+      type: secondary
+
+grid:
+  rows: 9
+  columns: 9
+  boxes:
+    rows: 3
+    columns: 3
+
+cell_states:
+  empty:
+    editable: true
+  given:
+    editable: false
+    css_class: hs-cell-given
+  user_entered:
+    editable: true
+    css_class: hs-cell-user
+  solver_filled:
+    editable: true
+    css_class: hs-cell-solved
+  invalid:
+    css_class: hs-cell-invalid
+
+validation:
+  allow_temporary_conflicts: true
+  prevent_solving_when_invalid: true
+  highlight_invalid_cells: true
+  explain_conflicts: true
+
+  conflict_types:
+    - duplicate_in_row
+    - duplicate_in_column
+    - duplicate_in_box
+
+  messages:
+    row_duplicate: "Row {row} contains two {value}s."
+    column_duplicate: "Column {column} contains two {value}s."
+    box_duplicate: "Box {box} contains two {value}s."
+    invalid_string_length: "The pasted puzzle must contain exactly 81 characters."
+    invalid_string_character: "The pasted puzzle contains invalid characters."
+    no_solution: "This puzzle has no valid solution."
+    multiple_solutions: "This puzzle has multiple possible solutions."
+
+solver:
+  strategy: human_techniques_then_backtracking
+
+  solve_one_cell:
+    enabled: true
+    use_backtracking: false
+    message_when_no_move: "No logical move available."
+
+  solve_all:
+    enabled: true
+    validate_before_solving: true
+    allow_backtracking_fallback: true
+
+  techniques:
+    initial:
+      - naked_single
+      - hidden_single
+      - single_candidate
+    future:
+      - naked_pairs
+      - hidden_pairs
+      - x_wing
+      - swordfish
+
+generation:
+  enabled: true
+  require_unique_solution: true
+
+  difficulty:
+    Easy:
+      approximate_givens_min: 36
+      approximate_givens_max: 45
+    Medium:
+      approximate_givens_min: 30
+      approximate_givens_max: 35
+    Hard:
+      approximate_givens_min: 24
+      approximate_givens_max: 29
+
+completion:
+  display_completed_puzzle: true
+  highlight_solver_filled_cells: true
+  show_elapsed_time: true
+  show_step_count: true
+  show_backtracking_used: true
+  allow_new_puzzle_generation: true
+
+status_panel:
+  enabled: true
+  message_types:
+    - info
+    - success
+    - warning
+    - error
+
+accessibility:
+  keyboard_navigation: true
+  aria_labels: true
+  high_contrast_support: true
+  focus_styles: true
+
+performance:
+  validation_target_ms: 100
+  solve_target_ms: 1000
+  generation_target_ms: 3000
+
+deployment:
+  suggested_folder: SiteAssets/HelloSudoku
+  files:
+    - hello-sudoku.html
+    - hello-sudoku.js
+    - hello-sudoku.css
+
+code_generation_rules:
+  source_of_truth: this_specification
+  manual_code_changes_allowed: false
+  change_process:
+    - update_specification
+    - increment_version
+    - regenerate_code
+    - test_against_specification
+```
+
+---
